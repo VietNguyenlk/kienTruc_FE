@@ -8,6 +8,7 @@ function App() {
   const [selectedLHPIndex, setSelectedLHPIndex] = useState(null);
   const [listSubject, setListSubject] = useState([]);
   const [listLHP, setListLHP] = useState([]);
+
   // STT
   const subjectCounter=1;
 
@@ -31,10 +32,11 @@ listSubject();
     setSelectedCourseIndex(index);
   };
   const handleRadioChangeLHP = (index) => {
+    console.log("index",index);
     setSelectedLHPIndex(index);
   }
 // get lhp theo mã  mon hoc
-const getListLHP = async (maHP) => {
+const getLHP = async (maHP) => {
   try {
     const response = await getApiLHP("/getListLopHocPhanByMaMonHoc/"+maHP)
     console.log(response.data.data);
@@ -43,6 +45,14 @@ const getListLHP = async (maHP) => {
     console.log("loi lhp", error);
   }
 }
+// get chi tiet lhp
+// const getDetailLHP =(lhp) => {
+//   console.log("lhoo",lhp);
+//   setListDetailLHP(lhp);
+//   console.log("listDetailLHP",listDetailLHP);
+ 
+
+// }
 
   return (
     <div className="App">  
@@ -64,7 +74,7 @@ const getListLHP = async (maHP) => {
             
             <tr key={index}>
             <td> <input type="radio" checked={selectedCourseIndex === index} onChange={() => handleRadioChange(index)}
-              onClick={() => {getListLHP(course.maHP);}}
+              onClick={() => {getLHP(course.maHP);}}
             ></input> </td>
              
               <td>{subjectCounter+index}</td>
@@ -99,7 +109,7 @@ const getListLHP = async (maHP) => {
             
             <tr key={index}>
             <td> <input type="radio" checked={selectedLHPIndex === index} onChange={() => handleRadioChangeLHP(index)}
-              // onClick={() => {getListLHP(course.maHP);}}
+              // onClick={() => {getDetailLHP(course)}}
             ></input> </td>
               <td>{subjectCounter+index}</td>
               <td>{course.maLopHocPhan}</td>
@@ -112,10 +122,50 @@ const getListLHP = async (maHP) => {
           ))}
         </tbody>
       </table>
-          
-
-
           </div>
+          <h2>Chi Tiết lớp Học Phần</h2>
+          <div>
+          <table className="course-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>STT</th>
+            <th>Lịch Học</th>
+            <th>Nhóm TH</th>
+            <th>Phòng</th>
+            <th>Cơ Sở</th>
+            <th>Giảng Viên</th>
+            <th>
+              Thời Gian
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+
+        {selectedLHPIndex !== null && listLHP[selectedLHPIndex] && (
+        <tr>
+          <td>...</td>
+          <td>{subjectCounter + selectedLHPIndex}</td>
+          <td>{listLHP[selectedLHPIndex].tietHoc}</td>
+          <td></td>
+          <td>{listLHP[selectedLHPIndex].phongHoc}</td>
+          <td>cơ sở 1</td>
+          <td>{listLHP[selectedLHPIndex].giangVien}</td>
+          <td>{listLHP[selectedLHPIndex].ngayBatDau}-{listLHP[selectedLHPIndex].ngayKetThuc}</td>
+        </tr>
+        
+       
+      )}
+   
+        </tbody>
+      </table>
+      <input type="button" value="Đăng ký môn học" style={{justifyContent:"center",
+      alignItems:"center",height:"30px",backgroundColor:"#FF9900",color:"white",borderRadius:"5px",marginTop:"10px"
+      }}  >
+        
+      </input>
+      
+      </div>
 
 
     </div>
