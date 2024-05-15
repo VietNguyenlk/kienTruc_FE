@@ -1,7 +1,6 @@
 import React, { useState} from "react";
 import "./DangNhap.css";
 import { postApiUser } from "../../api/Api";
-import TrangChu from "../trangchu/TrangChu";
 
 function DangNhap() {
   const [maSV, setMaSV] = useState("");
@@ -22,8 +21,8 @@ function DangNhap() {
         password: matKhau,
       });
       if (response.data.status === "OK") {
-        alert("Đăng nhập thành công");
-        <TrangChu maSV={maSV} />;
+        // alert("Đăng nhập thành công");
+        window.location.href = `/trangchu?maSV=${maSV}`;
       } else {
         alert("Đăng nhập thất bại");
         setMaSV("");
@@ -39,7 +38,7 @@ function DangNhap() {
       <div className="container">
       <table>
         <thead style={{ margin: "10px" }}>
-          <tr style={{ width: "100%" }}>
+          <tr style={{ width: "100%",margin: "10px"  }}>
             <td colSpan="2" style={{ textAlign: "center" }}>
               <h3>ĐĂNG KÍ HỌC PHẦN</h3>
             </td>
