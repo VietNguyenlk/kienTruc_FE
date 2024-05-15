@@ -8,6 +8,9 @@ function DangKiHocPhan() {
   const [listSubject, setListSubject] = useState([]);
   const [listLHP, setListLHP] = useState([]);
   const [listLHPBySv, setListLHPBySv] = useState([]);
+  // combobox
+const [selectedYear, setSelectedYear] = useState("");
+const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các năm học cần thiết
   const maSV = "20000001";
 
   const subjectCounter = 1;
@@ -19,14 +22,26 @@ function DangKiHocPhan() {
         const res = await getApiNoneToken(
           "http://localhost:3001/api/monhoc/getListSubject"
         );
-        console.log("mon hoc", res.data.data);
-        setListSubject(res.data.data);
+        // console.log("mon hoc", res.data.data);
+        // setListSubject(res.data.data);
+        // Lọc danh sách theo năm học đã chọn
+    if (selectedYear && selectedYear !== "Chọn năm học") {
+      const filteredSubjects = res.data.data.filter(subject => subject.namHoc === selectedYear);
+      setListSubject(filteredSubjects);
+    } else {
+      setListSubject(res.data.data);
+      // alert("Vui lòng chọn năm học")
+    }
+
+
+
+
       } catch (error) {
         console.log("loi", error);
       }
     };
     fetchListSubject();
-  }, []);
+  }, [selectedYear]);
 
   const handleRadioChange = (index) => {
     setSelectedCourseIndex(index);
@@ -41,7 +56,14 @@ function DangKiHocPhan() {
     try {
       const response = await getApiLHP("/getListLopHocPhanByMaMonHoc/" + maHP);
       console.log(response.data.data);
-      setListLHP(response.data.data);
+      // setListLHP(response.data.data);
+
+     
+      const filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear);
+      setListLHP(filteredSubjects);
+
+
+
     } catch (error) {
       console.log("loi lhp", error);
     }
@@ -76,6 +98,9 @@ function DangKiHocPhan() {
       const response = await getApiLHP("/getListLopHocPhanByMaSV/" + maSV);
       console.log("lhp theo sv", response.data.data);
       setListLHPBySv(response.data.data);
+      // let filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear);
+      // setListLHPBySv(filteredSubjects);
+      
     } catch (error) {
       console.log("Loi get list", error);
     }
@@ -87,6 +112,24 @@ function DangKiHocPhan() {
 
   return (
     <div className="App">
+     {/* combobox */}
+    <div >
+    <label htmlFor="year-select">Chọn năm học: </label>
+       <select
+           id="year-select"
+           value={selectedYear}
+           onChange={(e) => setSelectedYear(e.target.value)}
+    >
+      <option value="">Chọn năm học</option>
+      {years.map((year, index) => (
+        <option key={index} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+
+
       <h2>Đăng ký học phần</h2>
       <table className="course-table">
         <thead>
@@ -151,7 +194,7 @@ function DangKiHocPhan() {
                 </td>
                 <td className="stt-column">{subjectCounter + index}</td>
                 <td>{course.maLopHocPhan}</td>
-                <td></td>
+                <td>{course.tenMonHoc}</td>
                 <td>{course.tenLopHocPhan}</td>
                 <td>{course.soLuongSV}</td>
                 <td>{course.danhSachSinhVien.length}</td>
@@ -229,20 +272,22 @@ function DangKiHocPhan() {
             </tr>
           </thead>
           <tbody>
-            {listLHPBySv.map((course, index) => (
-              <tr key={index}>
-                <td></td>
-                <td>{subjectCounter + index}</td>
-                <td>{course.maLopHocPhan}</td>
-                <td>{course.tenMonHoc}</td>
-                <td>{course.tenLopHocPhan}</td>
-                <td>{course.soTC}</td>
-                <td></td>
-                <td></td>
-                <td>X</td>
-                <td>{course.tinhTrang}</td>
-              </tr>
-            ))}
+            {listLHPBySv
+              .filter(course => course.namHoc === selectedYear)
+              .map((course, index) => (
+                <tr key={index}>
+                  <td></td>
+                  <td>{subjectCounter + index}</td>
+                  <td>{course.maLopHocPhan}</td>
+                  <td>{course.tenMonHoc}</td>
+                  <td>{course.tenLopHocPhan}</td>
+                  <td>{course.soTC}</td>
+                  <td></td>
+                  <td></td>
+                  <td>X</td>
+                  <td>{course.tinhTrang}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
