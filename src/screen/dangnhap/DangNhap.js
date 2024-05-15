@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import "./DangNhap.css";
 import { postApiUser } from "../../api/Api";
+import TrangChu from "../trangchu/TrangChu";
+
 function DangNhap() {
   const [maSV, setMaSV] = useState("");
   const [matKhau, setMatKhau] = useState("");
+ 
 
   const changeMaSV = (e) => {
     setMaSV(e.target.value);
@@ -20,7 +23,7 @@ function DangNhap() {
       });
       if (response.data.status === "OK") {
         alert("Đăng nhập thành công");
-        window.location.href = "/trangchu";
+        <TrangChu maSV={maSV} />;
       } else {
         alert("Đăng nhập thất bại");
         setMaSV("");
@@ -31,24 +34,31 @@ function DangNhap() {
       alert("Error while fetching token: " + error.message);
     }
   };
-
   return (
-    <div className="container">
-      <table className="table">
-        <thead>
+    <div className="body">
+      <div className="container">
+      <table>
+        <thead style={{ margin: "10px" }}>
           <tr style={{ width: "100%" }}>
             <td colSpan="2" style={{ textAlign: "center" }}>
               <h3>ĐĂNG KÍ HỌC PHẦN</h3>
             </td>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{ margin: "20px" }}>
           <tr>
             <td>
               <label htmlFor="maSV">Mã sinh viên</label>
             </td>
             <td>
-              <input type="text" value={maSV} id="maSV" name="maSV" onChange={changeMaSV} />
+              <input
+                style={{ width: "100%" }}
+                type="text"
+                value={maSV}
+                id="maSV"
+                name="maSV"
+                onChange={changeMaSV}
+              />
             </td>
           </tr>
           <tr>
@@ -57,6 +67,7 @@ function DangNhap() {
             </td>
             <td>
               <input
+                style={{ width: "100%" }}
                 type="password"
                 id="password"
                 name="password"
@@ -75,6 +86,7 @@ function DangNhap() {
           </tr>
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

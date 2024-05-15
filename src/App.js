@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DangKiHocPhan from "./screen/DangKiHocPhan";
 import DangNhap from "./screen/dangnhap/DangNhap";
-import TrangChu from "./screen/TrangChu";
+import TrangChu from "./screen/trangchu/TrangChu";
 function App() {
 
   return (
