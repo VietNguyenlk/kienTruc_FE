@@ -91,8 +91,8 @@ function DangKiHocPhan() {
       <table className="course-table">
         <thead>
           <tr>
-            <th></th>
-            <th>STT</th>
+            <th className="radio-column"></th>
+            <th className="stt-column">STT</th>
             <th>Mã HP</th>
             <th>Tên Môn Học</th>
             <th>TC</th>
@@ -103,7 +103,7 @@ function DangKiHocPhan() {
         <tbody>
           {listSubject.map((course, index) => (
             <tr key={index}>
-              <td>
+              <td className="radio-column">
                 <input
                   type="radio"
                   checked={selectedCourseIndex === index}
@@ -113,7 +113,7 @@ function DangKiHocPhan() {
                   }}
                 ></input>
               </td>
-              <td>{subjectCounter + index}</td>
+              <td className="stt-column">{subjectCounter + index}</td>
               <td>{course.maHP}</td>
               <td>{course.tenMonHoc}</td>
               <td>{course.TC}</td>
@@ -128,8 +128,8 @@ function DangKiHocPhan() {
         <table className="course-table">
           <thead>
             <tr>
-              <th></th>
-              <th>STT</th>
+              <th className="radio-column"></th>
+              <th className="stt-column">STT</th>
               <th>Mã LHP</th>
               <th>Tên lớp HP</th>
               <th>Lớp dự kiến</th>
@@ -141,14 +141,15 @@ function DangKiHocPhan() {
           <tbody>
             {listLHP.map((course, index) => (
               <tr key={index}>
-                <td>
+                <td className="radio-column">
                   <input
+                    
                     type="radio"
                     checked={selectedLHPIndex === index}
                     onChange={() => handleRadioChangeLHP(index)}
                   ></input>
                 </td>
-                <td>{subjectCounter + index}</td>
+                <td className="stt-column">{subjectCounter + index}</td>
                 <td>{course.maLopHocPhan}</td>
                 <td></td>
                 <td>{course.tenLopHocPhan}</td>
@@ -200,11 +201,13 @@ function DangKiHocPhan() {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            height: "30px",
+            height: "50px",
             backgroundColor: "#FF9900",
             color: "white",
             borderRadius: "5px",
             marginTop: "10px",
+            width: "260px",
+            marginBottom: "10px",
           }}
         ></input>
       </div>
