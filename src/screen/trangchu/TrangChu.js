@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./TrangChu.css";
+import NestedCircles from "./NestedCircles"; // Import NestedCircles
 import { getApiUser } from "../../api/Api.js";
 
 function TrangChu() {
@@ -48,8 +49,28 @@ function TrangChu() {
     window.location.href = "/dangkihocphan";
   };
 
+  const handlePlan = () => {
+    window.location.href = "/thoikhoabieu";
+  };
+
+  const handlePoint = () => {
+    window.location.href = "/diemmonhoc";
+  };
+
+  const handleCongNo = () => {
+    alert("Chức năng đang được phát triển");
+  }
+
+  // const handleTrucTuyen = () => {
+  //   alert("Chức năng đang được phát triển");
+  // }
+
+  const handleNhacNho = () => {
+    alert("Chức năng đang được phát triển");
+  }
+
   return (
-    <div className="body">
+    <div className="body" style={{ display: "flex", alignItems: "baseline", overflow:"scroll" }}>
       <div className="container">
         <div className="containLeft">
           <div className="containLeftTop">
@@ -111,15 +132,47 @@ function TrangChu() {
                 <span type="text"> {nganh} </span>
               </td>
             </tr>
-            <tr style={{ textAlign: "right" }}>
-              <td>
-                <button className="btn" type="button" onClick={handleSignUp}>
-                  Đăng kí học phần
-                </button>
-              </td>
-            </tr>
           </table>
         </div>
+        <div className="containPlan">
+          <h4 style={{fontSize:"22px"}}>TIẾN ĐỘ HỌC TẬP</h4>
+          <NestedCircles innerPercent={80} outerPercent={156} /> 
+        </div>
+      </div>
+      <div className="footer">
+      <button
+            style={{ margin: "5px" }}
+            className="btn"
+            type="button"
+            onClick={handlePlan}
+          >
+            Thời khoá biểu
+          </button>
+          <button
+            style={{ margin: "5px" }}
+            className="btn"
+            type="button"
+            onClick={handlePoint}
+          >
+            Điểm môn học
+          </button>
+          <button
+            style={{ margin: "5px" }}
+            className="btn"
+            type="button"
+            onClick={handleSignUp}
+          >
+            Đăng kí học phần
+          </button>
+          <button onClick={handleCongNo} style={{ margin: "5px" }} className="btn" type="button">
+            Tra cứu công nợ
+          </button>
+          {/* <button onClick={handleTrucTuyen} style={{ margin: "5px" }} className="btn" type="button">
+            Thanh toán trực tuyến
+          </button> */}
+          <button onClick={handleNhacNho} style={{ margin: "5px" }} className="btn" type="button">
+            Nhắc nhở
+          </button>
       </div>
     </div>
   );

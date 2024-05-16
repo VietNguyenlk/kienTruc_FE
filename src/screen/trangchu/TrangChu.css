@@ -3,30 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
-.body{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 .container{
-    width: 80%;
-    height: 60vh;
-
+    width: 100%;
+    height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.containLeft{
-    width: 40%;
-    height: 100%;
-    padding: 30px;
-    display: inline-block;
-    justify-content: center;
 }
 td{
     width: 50%;
+    height: 50px;
 }
 label{
     width: 40%;
@@ -45,20 +31,25 @@ span{
 .containLeftBottom{
     width: 100%;
     height: 85%;
+    display: flex;
     justify-content: center;
     align-items: center;
     padding: 30px 50px 50px 50px;
+    text-align: center;
+}
+tr{
+    height: 50px;
 }
 .row{
     width: 100%;
-    height: 16%;
+    height: 50px;
     display:flex;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 .avatar{
-    width: 90%;
-    height: 250px;
+    width: 80%;
+    height: 230px;
     background-color: brown;
     border-radius: 50%;
     display: flex;
@@ -72,11 +63,40 @@ span{
     display: flex;
     align-items: center;
 }
-.containRight{
-    width: 70%;
+.containLeft{
+    width: 30%;
     height: 100%;
-    padding: 30px;
+    padding: 15px;
+    display: inline-block;
+    justify-content: center;
+}
+.containRight{
+    width: 45%;
+    height: 100%;
+    padding: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.containPlan{
+    width: 25%;
+    height: 100%;
+    padding: 15px;
+    text-align: center;
+    display: grid;
+    justify-content: center;
+}
+button{
+    width: 100%;
+    height: 45px;
+}
+
+.footer{
+    width: 100%;
+    height: max-content;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1f1;
+    margin-top: 5px;
 }
