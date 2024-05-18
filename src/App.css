@@ -12,9 +12,7 @@
 .course-table th, .course-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  width:   50px;
-
- 
+  width:   100px;
 }
 
 .course-table th {
