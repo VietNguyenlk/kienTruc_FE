@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../App.css";
 import { getApiLHP, getApiNoneToken, postApiLHP } from "../api/Api";
 
@@ -8,34 +8,38 @@ function DangKiHocPhan() {
   const [listSubject, setListSubject] = useState([]);
   const [listLHP, setListLHP] = useState([]);
   const [listLHPBySv, setListLHPBySv] = useState([]);
-  // combobox
-const [selectedYear, setSelectedYear] = useState("");
-const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các năm học cần thiết
-  const maSV = "20000001";
+  
+  const [selectedYear, setSelectedYear] = useState("");
+  const years = ["2021-2022", "2022-2023", "2023-2024", "2024-2025"]; // Thêm các năm học cần thiết
+  const [maSV, setMaSV] = useState("");
+
+  const getQueryParam = (param) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  };
+
+  useEffect(() => {
+    const maSVFromUrl = getQueryParam("maSV");
+    if (maSVFromUrl) {
+      setMaSV(maSVFromUrl);
+    }
+  }, []);
 
   const subjectCounter = 1;
 
   useEffect(() => {
     const fetchListSubject = async () => {
       try {
-        console.log("listSubject");
         const res = await getApiNoneToken(
           "http://localhost:3001/api/monhoc/getListSubject"
         );
-        // console.log("mon hoc", res.data.data);
-        // setListSubject(res.data.data);
-        // Lọc danh sách theo năm học đã chọn
-    if (selectedYear && selectedYear !== "Chọn năm học") {
-      const filteredSubjects = res.data.data.filter(subject => subject.namHoc === selectedYear);
-      setListSubject(filteredSubjects);
-    } else {
-      setListSubject(res.data.data);
-      // alert("Vui lòng chọn năm học")
-    }
 
-
-
-
+        if (selectedYear && selectedYear !== "Chọn năm học") {
+          const filteredSubjects = res.data.data.filter(subject => subject.namHoc === selectedYear);
+          setListSubject(filteredSubjects);
+        } else {
+          setListSubject(res.data.data);
+        }
       } catch (error) {
         console.log("loi", error);
       }
@@ -48,22 +52,15 @@ const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các
   };
 
   const handleRadioChangeLHP = (index) => {
-    console.log("index", index);
     setSelectedLHPIndex(index);
   };
 
   const getLHP = async (maHP) => {
     try {
       const response = await getApiLHP("/getListLopHocPhanByMaMonHoc/" + maHP);
-      console.log(response.data.data);
-      // setListLHP(response.data.data);
 
-     
       const filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear);
       setListLHP(filteredSubjects);
-
-
-
     } catch (error) {
       console.log("loi lhp", error);
     }
@@ -77,7 +74,6 @@ const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các
       });
       console.log(response);
 
-      // After successful registration, fetch the updated list of registered courses
       getLHPBySv(); 
     } catch (error) {
       console.log("loi dang ky", error);
@@ -87,48 +83,62 @@ const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các
   const handleRegisterClick = () => {
     if (selectedLHPIndex !== null) {
       const selectedCourse = listLHP[selectedLHPIndex];
-      registerCourse(selectedCourse.maLopHocPhan);
+      // Tính tổng số tín chỉ đã đăng ký trong năm học được chọn
+      const totalTC = listLHPBySv
+        .filter((course) => course.namHoc === selectedYear)
+        .reduce((total, course) => total + course.soTC, 0);
+
+      // Kiểm tra nếu tổng số tín chỉ sau khi thêm môn học mới vượt quá 30
+      console.log("Số tín chỉ đã vượt quá giới hạn 30 tín chỉ.", totalTC + selectedCourse.soTC);
+      if (totalTC + selectedCourse.soTC > 30) {
+        alert("Số tín chỉ đã vượt quá giới hạn 30 tín chỉ.");
+        console.log("Số tín chỉ đã vượt quá giới hạn 30 tín chỉ.", totalTC + selectedCourse.soTC);
+        return;
+      }
+
+      const userConfirmed = window.confirm(`Are you sure you want to register for the course: ${selectedCourse.maLopHocPhan}?`);
+
+      if (userConfirmed) {
+        registerCourse(selectedCourse.maLopHocPhan);
+      }
     } else {
       alert("Please select a course to register.");
     }
   };
 
-  const getLHPBySv = async () => {
+  const getLHPBySv = useCallback(async () => {
     try {
       const response = await getApiLHP("/getListLopHocPhanByMaSV/" + maSV);
-      console.log("lhp theo sv", response.data.data);
       setListLHPBySv(response.data.data);
-      // let filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear);
-      // setListLHPBySv(filteredSubjects);
-      
     } catch (error) {
       console.log("Loi get list", error);
     }
-  };
+  }, [maSV]);
 
   useEffect(() => {
-    getLHPBySv();
-  }, []);
+    if (maSV) {
+      getLHPBySv();
+    }
+  }, [maSV, getLHPBySv]);
 
   return (
     <div className="App">
-     {/* combobox */}
-    <div >
-    <label htmlFor="year-select">Chọn năm học: </label>
-       <select
-           id="year-select"
-           value={selectedYear}
-           onChange={(e) => setSelectedYear(e.target.value)}
-    >
-      <option value="">Chọn năm học</option>
-      {years.map((year, index) => (
-        <option key={index} value={year}>
-          {year}
-        </option>
-      ))}
-    </select>
-  </div>
-
+      {/* Combobox */}
+      <div>
+        <label htmlFor="year-select">Chọn năm học: </label>
+        <select
+          id="year-select"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+        >
+          <option value="">Chọn năm học</option>
+          {years.map((year, index) => (
+            <option key={index} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <h2>Đăng ký học phần</h2>
       <table className="course-table">
@@ -186,7 +196,6 @@ const years = ["2021-2022", "2022-2023", "2023-2024","2024-2025"]; // Thêm các
               <tr key={index}>
                 <td className="radio-column">
                   <input
-                    
                     type="radio"
                     checked={selectedLHPIndex === index}
                     onChange={() => handleRadioChangeLHP(index)}

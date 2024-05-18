@@ -46,7 +46,8 @@ function TrangChu() {
   }, [maSV]);
 
   const handleSignUp = () => {
-    window.location.href = "/dangkihocphan";
+    window.location.href = `/dangkihocphan?maSV=${maSV}`;
+    ///trangchu?maSV=${maSV}
   };
 
   const handlePlan = () => {
@@ -115,7 +116,7 @@ function TrangChu() {
             <tr className="row">
               <td>
                 <label>Ngày sinh: </label>
-                <span type="text"> {noiSinh} </span>
+                <span type="text"> {ns} </span>
               </td>
               <td>
                 <label>Loại đào tạo: </label>
@@ -125,7 +126,7 @@ function TrangChu() {
             <tr className="row">
               <td>
                 <label>Nơi sinh: </label>
-                <span type="text"> {ns} </span>
+                <span type="text"> {noiSinh} </span>
               </td>
               <td>
                 <label>Ngành: </label>
