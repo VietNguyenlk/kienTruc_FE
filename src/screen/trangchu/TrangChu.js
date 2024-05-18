@@ -51,7 +51,7 @@ function TrangChu() {
   };
 
   const handlePlan = () => {
-    window.location.href = "/thoikhoabieu";
+    window.location.href = `/thoikhoabieu?maSV=${maSV}`;
   };
 
   const handlePoint = () => {
