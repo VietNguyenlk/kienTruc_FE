@@ -2,11 +2,10 @@ import React from "react";
 import "./TrangDiem.css";
 
 function TrangDiem() {
+  
   return (
     <div className="body">
-      <tr>
-        <h1>Điểm môn học</h1>
-      </tr>
+      <h1>Điểm môn học</h1>
       <table className="table">
         <thead>
           <tr>
@@ -36,9 +35,12 @@ function TrangDiem() {
             <th>5</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+   
+        </tbody>
       </table>
     </div>
   );
 }
+
 export default TrangDiem;

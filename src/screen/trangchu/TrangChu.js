@@ -61,10 +61,6 @@ function TrangChu() {
     alert("Chức năng đang được phát triển");
   }
 
-  // const handleTrucTuyen = () => {
-  //   alert("Chức năng đang được phát triển");
-  // }
-
   const handleNhacNho = () => {
     alert("Chức năng đang được phát triển");
   }
@@ -146,7 +142,7 @@ function TrangChu() {
             type="button"
             onClick={handlePlan}
           >
-            Thời khoá biểu
+            Lịch học
           </button>
           <button
             style={{ margin: "5px" }}
@@ -167,9 +163,6 @@ function TrangChu() {
           <button onClick={handleCongNo} style={{ margin: "5px" }} className="btn" type="button">
             Tra cứu công nợ
           </button>
-          {/* <button onClick={handleTrucTuyen} style={{ margin: "5px" }} className="btn" type="button">
-            Thanh toán trực tuyến
-          </button> */}
           <button onClick={handleNhacNho} style={{ margin: "5px" }} className="btn" type="button">
             Nhắc nhở
           </button>
