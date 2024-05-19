@@ -121,6 +121,27 @@ function DangKiHocPhan() {
     }
   }, [maSV, getLHPBySv]);
 
+  // hủy đăng ký học phần 
+  const HuyDangKy = async (maLHP) => {
+    try {
+      const userConfirmed = window.confirm("bạn có chắc muốn hủy đăng ký?" );
+      console.log("maLHP", maLHP);
+      if (userConfirmed) {
+        const response = await postApiLHP("/deleteSinhVien", {
+          maLopHocPhan: maLHP,
+          maSV: maSV,
+        });
+        
+        console.log(response);
+      }
+  
+
+      getLHPBySv(); 
+    } catch (error) {
+      console.log("loi dang ky", error);
+    }
+  };
+
   return (
     <div className="App">
       {/* Combobox */}
@@ -285,7 +306,7 @@ function DangKiHocPhan() {
               .filter(course => course.namHoc === selectedYear)
               .map((course, index) => (
                 <tr key={index}>
-                  <td></td>
+                   <input type="button"  onClick={()=>HuyDangKy(course.maLopHocPhan)} value={"Hủy"}></input> 
                   <td>{subjectCounter + index}</td>
                   <td>{course.maLopHocPhan}</td>
                   <td>{course.tenMonHoc}</td>
