@@ -11,6 +11,8 @@ function DangKiHocPhan() {
   
   const [selectedYear, setSelectedYear] = useState("");
   const years = ["2021-2022", "2022-2023", "2023-2024", "2024-2025"]; // Thêm các năm học cần thiết
+  const [listHK, setListHK] = useState("");
+  const hk = ["HK1", "HK2"]; // Thêm các học kỳ cần thiết
   const [maSV, setMaSV] = useState("");
 
   const getQueryParam = (param) => {
@@ -59,8 +61,12 @@ function DangKiHocPhan() {
     try {
       const response = await getApiLHP("/getListLopHocPhanByMaMonHoc/" + maHP);
 
-      const filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear);
+      if (listHK && listHK !== "Chọn HK") {
+      const filteredSubjects = response.data.data.filter(subject => subject.namHoc === selectedYear && subject.hocKy === listHK);
       setListLHP(filteredSubjects);
+      } else {
+        alert("Vui lòng chọn HK");
+      }
     } catch (error) {
       console.log("loi lhp", error);
     }
@@ -109,11 +115,15 @@ function DangKiHocPhan() {
   const getLHPBySv = useCallback(async () => {
     try {
       const response = await getApiLHP("/getListLopHocPhanByMaSV/" + maSV);
-      setListLHPBySv(response.data.data);
+      if (listHK && listHK !== "Chọn HK") {
+        const filteredSubjects = response.data.data.filter(subject => subject.hocKy === listHK);
+        setListLHPBySv(filteredSubjects);
+      }
+      // setListLHPBySv(response.data.data);
     } catch (error) {
       console.log("Loi get list", error);
     }
-  }, [maSV]);
+  }, [maSV,listHK]);
 
   useEffect(() => {
     if (maSV) {
@@ -156,6 +166,23 @@ function DangKiHocPhan() {
           {years.map((year, index) => (
             <option key={index} value={year}>
               {year}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
+      <div style={{marginTop:10, marginLeft:2}}>
+        <label htmlFor="year-select">Chọn HK: </label>
+        <select
+          id="HK-select"
+          value={listHK}
+          onChange={(e) => setListHK(e.target.value)}
+        >
+          <option value="">Chọn HK</option>
+          {hk.map((hk, index) => (
+            <option key={index} value={hk}>
+              {hk}
             </option>
           ))}
         </select>
