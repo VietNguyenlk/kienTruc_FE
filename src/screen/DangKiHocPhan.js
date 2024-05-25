@@ -89,10 +89,35 @@ function DangKiHocPhan() {
   const handleRegisterClick = () => {
     if (selectedLHPIndex !== null) {
       const selectedCourse = listLHP[selectedLHPIndex];
+        // Check if the course is full
+    if (selectedCourse.danhSachSinhVien.length >= selectedCourse.soLuongSV) {
+      alert("Lớp học phần này đã đầy. Không thể đăng ký thêm.");
+      return;
+    }
       // Tính tổng số tín chỉ đã đăng ký trong năm học được chọn
       const totalTC = listLHPBySv
         .filter((course) => course.namHoc === selectedYear)
         .reduce((total, course) => total + course.soTC, 0);
+
+      // // nếu đã đăng ký rồi thì k cho đăng ký
+      // const isRegistered = listLHPBySv.some(
+      //   (course) => course.maLopHocPhan === selectedCourse.maLopHocPhan
+      // );
+      // if (isRegistered) {
+      //   alert("Bạn đã đăng ký lớp học phần này rồi.");
+      //   return;
+      // }
+      //    // nếu đăng ký môn học đó rồi, thì mấy lớp trùng mã môn học đó thì k đăng ký nữa
+      
+      //  const isRegisteredSameSubject = listLHPBySv.some(
+      //     (course) => course.maHP === selectedCourse.maHP
+      //   );
+      //   if (isRegisteredSameSubject) {
+      //     alert("Bạn đã đăng ký môn học này rồi.");
+      //     return;
+      //   }
+
+
 
       // Kiểm tra nếu tổng số tín chỉ sau khi thêm môn học mới vượt quá 30
       console.log("Số tín chỉ đã vượt quá giới hạn 30 tín chỉ.", totalTC + selectedCourse.soTC);
@@ -130,6 +155,13 @@ function DangKiHocPhan() {
       getLHPBySv();
     }
   }, [maSV, getLHPBySv]);
+  ///
+  // Function to filter out already registered courses
+const getAvailableCourses = () => {
+  return listSubject.filter(
+    (subject) => !listLHPBySv.some((registeredCourse) => registeredCourse.maMonHoc === subject.maHP)
+  );
+};
 
   // hủy đăng ký học phần 
   const HuyDangKy = async (maLHP) => {
@@ -202,7 +234,7 @@ function DangKiHocPhan() {
           </tr>
         </thead>
         <tbody>
-          {listSubject.map((course, index) => (
+        {getAvailableCourses().map((course, index) => (
             <tr key={index}>
               <td className="radio-column">
                 <input
@@ -281,7 +313,7 @@ function DangKiHocPhan() {
               <tr>
                 <td>...</td>
                 <td>{subjectCounter + selectedLHPIndex}</td>
-                <td>{listLHP[selectedLHPIndex].tietHoc}</td>
+                <td>{listLHP[selectedLHPIndex].tietHoc} {listLHP[selectedLHPIndex].dayOfWeek}</td>
                 <td></td>
                 <td>{listLHP[selectedLHPIndex].phongHoc}</td>
                 <td>cơ sở 1</td>
@@ -340,7 +372,7 @@ function DangKiHocPhan() {
                   <td>{course.tenLopHocPhan}</td>
                   <td>{course.soTC}</td>
                   <td></td>
-                  <td></td>
+                  <td>  {course.soTC * 610000} {/* Calculate tuition fee */}</td>
                   <td>X</td>
                   <td>{course.tinhTrang}</td>
                 </tr>
